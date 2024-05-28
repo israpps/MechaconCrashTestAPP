@@ -12,20 +12,9 @@ EE_BIN = hello.elf
 # NEWLIB_NANO = 1
 
 EE_OBJS = main.o
+EE_LIBS += -ldebug -lcdvd -lpatches
 EE_CFLAGS += -fdata-sections -ffunction-sections
 EE_LDFLAGS += -Wl,--gc-sections
-
-ifeq ($(DUMMY_TIMEZONE), 1)
-   EE_CFLAGS += -DDUMMY_TIMEZONE
-endif
-
-ifeq ($(DUMMY_LIBC_INIT), 1)
-   EE_CFLAGS += -DDUMMY_LIBC_INIT
-endif
-
-ifeq ($(KERNEL_NOPATCH), 1)
-   EE_CFLAGS += -DKERNEL_NOPATCH
-endif
 
 ifeq ($(DEBUG), 1)
   EE_CFLAGS += -DDEBUG -O0 -g
