@@ -88,13 +88,16 @@ int main()
     int is_PSX = 0;
     int is_fat = (ROMVERSION <= 190);
     int is_safe = 0;
+    int doubtful = 0;
     if (is_fat) {
         is_safe = !(ROMVERSION == 160 || ROMVERSION == 170 || ROMVERSION == 190); // assume console is unsafe if it is 39k or 50k
         if (!is_safe) {
             if (DSPVersion[1] == 0 || DSPVersion[1] == 1 || DSPVersion[1] == 2) is_safe = 1; //explicitly check safe DSP revisions that we can precisely ident
         }
     } else {
-        is_safe = (MechaConVersion[1] == 6 && MechaConVersion[2] >= 04);
+        is_safe = (MechaConVersion[1] == 6 && MechaConVersion[2] > 04); // surely has factory fix
+        doubtful = (MechaConVersion[1] == 6 && MechaConVersion[2] == 04); //depending on board rev, it can or cannot have fix
+        // 6.02 and 6.00 are surely unsafe
     }
     if ((fd = open("rom0:PSXVER", O_RDONLY)) >= 0) {
         close(fd);
@@ -103,19 +106,26 @@ int main()
 
     scr_printf(" >>>> DIAGNOSIS:\n");
     scr_printf("\t> CONSOLE: %s\n", (is_PSX) ? "PSX" : ((is_fat) ? "FAT" : "SLIM"));
-    if (is_safe) {
+    if (doubtful) {
+        scr_setfontcolor(0x00ffff);
+        scr_printf("\t> 6.04 MECHACON DETECTED\n");
+        scr_printf("\t> THIS CONSOLE HAS BOARD REVISIONS WITH AND WITHOUT THE FACTORY FIX\n");
+        scr_printf("\t> DISASSEMBLE THE CONSOLE TO FIND OUT\n");
+        scr_setfontcolor(0xffffff);
+    } else if (is_safe) {
         scr_setfontcolor(0x00ff00);
             scr_printf("\t> THIS CONSOLE IS SAFE FROM MECHACON CRASH\n");
         if ((!is_fat) && (!is_PSX)) scr_printf("\t\tIT HAS FACTORY PROTECTION\n");
     } else {
         scr_setfontcolor(0x0000ff);
         scr_printf("\t> THIS CONSOLE CAN SUFFER MECHACON CRASH\n");
-        scr_printf("\t> IF YOU WANT TO USE BURNT DISCS INSTALL PICFix TO PROTECT THE CONSOLE\n");
+        scr_printf("\t> IF YOU WANT TO USE BURNT DISCS INSTALL PICFix TO PROTECT THE CONSOLE\n\n");
+        scr_printf("\t> ROMEO MOD AND SIMILAR MODIFICATIONS ARE USELESS\n");
     }
 
     scr_setfontcolor(0xffffff);
-    scr_printf("\n\nProgram finished. returning to main menu in 60 seconds\n");
-    sleep(60);
+    scr_printf("\n\nProgram finished. returning to main menu in 2 minutes\n");
+    sleep(120);
     return 0;
 }
 
