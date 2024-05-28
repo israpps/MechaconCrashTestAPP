@@ -6,7 +6,7 @@
 # Licenced under Academic Free License version 2.0
 # Review ps2sdk README & LICENSE files for further details.
 
-EE_BIN = hello.elf
+EE_BIN = mechacon_crash_tester.elf
 
 # KERNEL_NOPATCH = 1
 # NEWLIB_NANO = 1

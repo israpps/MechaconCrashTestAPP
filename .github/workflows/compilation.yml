@@ -1,3 +1,9 @@
+permissions:
+  id-token: "write"
+  contents: "write"
+  packages: "write"
+  pull-requests: "read"
+
 name: CI
 
 on:
@@ -36,4 +42,14 @@ jobs:
       with:
         name: ${{ github.event.repository.name }}-${{ steps.slug.outputs.sha8 }}-${{matrix.docker_tag}}-${{ matrix.flags }}
         path: |
+          *.elf
+
+    - name: Create release
+      if: github.ref == 'refs/heads/master'
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        title: "Release"
+        files: |
           *.elf
