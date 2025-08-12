@@ -22,7 +22,7 @@ jobs:
 
     container: ps2dev/ps2dev:latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install dependencies
       run: |
@@ -38,7 +38,7 @@ jobs:
 
     - name: Upload artifacts
       if: ${{ success() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ github.event.repository.name }}-${{ steps.slug.outputs.sha8 }}-${{matrix.docker_tag}}-${{ matrix.flags }}
         path: |
