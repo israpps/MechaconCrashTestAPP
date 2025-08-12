@@ -108,7 +108,7 @@ int main()
     }
     if ((fd = open("rom0:PSXVER", O_RDONLY)) >= 0) {
         close(fd);
-        is_PSX = 1; is_safe = 1;
+        is_PSX = 1; is_safe = 0;
     }
 
     scr_printf(" >>>> DIAGNOSIS:\n");
