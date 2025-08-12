@@ -72,11 +72,12 @@ int main()
         scr_printf(" >>>> Failed to read MECHACON version.\n");
         scr_setfontcolor(0xffffff);
     } else {
-        if (MechaConVersion >= 0x050000) // DRAGON:
+        unsigned int MechaConVersionInt = (MechaConVersion[0] << 16) | (MechaConVersion[1] << 8) | MechaConVersion[2];
+        if (MechaConVersionInt >= 0x050000) // DRAGON:
         {
-            MechaConVersion = MechaConVersion & 0xfffeff; // Retail and debug chips are identical
-            if (MechaConVersion != 0x050607)
-                MechaConVersion = MechaConVersion & 0xffff00; // Mexico unit is unique
+            MechaConVersionInt = MechaConVersionInt & 0xfffeff; // Retail and debug chips are identical
+            if (MechaConVersionInt != 0x050607)
+                MechaConVersionInt = MechaConVersionInt & 0xffff00; // Mexico unit is unique
         }
         scr_printf(" >>>> MECHACON version: %d.%02d\n", MechaConVersion[1], MechaConVersion[2]);
     }
